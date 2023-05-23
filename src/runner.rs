@@ -17,14 +17,14 @@ use crate::{
 pub struct Args {
     /// Path to a source file, or directory containing source files to analyze. Zip and Jar files are also supported
     #[arg(short, long)]
-    dir: String,
+    root: String,
 
     /// The source code directory which to compare.
-    #[arg(long)]
+    #[arg(short, long)]
     source: String,
 
     /// The source code directory for which compare to.
-    #[arg(long)]
+    #[arg(short, long)]
     destination: String,
 
     /// The source code language.
@@ -135,7 +135,7 @@ impl Runner {
     }
 
     fn exec_cpd(args: &Args) -> Result<(), &'static str> {
-        let root_dir = &args.dir;
+        let root_dir = &args.root;
         let minimum_tokens = format!("{}", args.minimum_tokens);
         let output = Command::new("pmd")
             .arg("cpd")
@@ -287,7 +287,7 @@ impl Runner {
 
         // TODO: using language from args.
         let langs = [Lang::Swift];
-  
+
         let des_files = Scanner::scan(&args.destination, &langs).num_of_files();
         let source_files = Scanner::scan(&args.source, &langs).num_of_files();
 
