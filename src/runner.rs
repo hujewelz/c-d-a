@@ -278,9 +278,9 @@ impl Runner {
 
             let code_lines = count_lines(&val.source.file, true);
             result.push_str(&format!("\t{}\t", code_lines));
-            result.push_str(&format!("\t{:.2}%\t", val.rate_of_source_code() * 100.0));
-            result.push_str(&format!("\t{}\t", val.lines));
-            result.push_str(&format!("\t{:.2}%\n", val.dup_rate() * 100.0));
+            result.push_str(&format!("{:.2}%  \t", val.rate_of_source_code() * 100.0));
+            result.push_str(&format!("{}\t", val.lines));
+            result.push_str(&format!("{:.2}%\n", val.dup_rate() * 100.0));
 
             total_rate += val.dup_rate();
             self_rate += val.rate_of_source_code();
