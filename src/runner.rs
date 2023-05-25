@@ -236,7 +236,7 @@ impl Runner {
     }
 
     fn pretty_printed(dups: &[Duplication], args: &Args) {
-        let mut map = HashMap::new();
+        let mut map: HashMap<&String, Duplication> = HashMap::new();
 
         let mut max_width_of_source_file_name = 0;
         let mut max_width_of_dest_file_name: usize = 0;
@@ -245,8 +245,9 @@ impl Runner {
                 continue;
             }
 
-            let d = map.entry(&dup.source.file).or_insert(dup.clone());
-            d.add_lines(dup.lines);
+            map.entry(&dup.source.file)
+                .and_modify(|d| d.add_lines(dup.lines))
+                .or_insert(dup.clone());
 
             if dup.source.file.len() > max_width_of_source_file_name {
                 max_width_of_source_file_name = dup.source.file.len();
@@ -278,6 +279,7 @@ impl Runner {
             let code_lines = count_lines(&val.source.file, true);
             result.push_str(&format!("\t{}\t", code_lines));
             result.push_str(&format!("\t{:.2}%\t", val.rate_of_source_code() * 100.0));
+            result.push_str(&format!("\t{}\t", val.lines));
             result.push_str(&format!("\t{:.2}%\n", val.dup_rate() * 100.0));
 
             total_rate += val.dup_rate();
